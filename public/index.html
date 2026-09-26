@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>School+ — Lycée Bilingue de Nkoabang</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
+header{background:#0b8f6a;color:white;padding:18px}
+main{max-width:1000px;margin:auto;padding:18px}
+.card{background:white;border-radius:15px;padding:18px;margin:14px 0;box-shadow:0 3px 12px #0001}
+button{border:0;border-radius:9px;padding:11px 15px;background:#0b8f6a;color:white;margin:4px;cursor:pointer}
+input{width:100%;padding:12px;margin:7px 0;border:1px solid #ccd5e4;border-radius:9px}
+.hidden{display:none}
+.lesson{white-space:pre-line;line-height:1.6}
+.timer{font-size:28px;font-weight:bold}
+.ok{background:#e8f8ee;padding:12px;border-radius:9px}
+.bad{background:#fff0f0;padding:12px;border-radius:9px}
+</style>
+</head>
+
+<body>
+
+<header>
+<main>
+<h1>School+ 📚</h1>
+<div>Lycée Bilingue de Nkoabang</div>
+<nav id="nav"></nav>
+</main>
+</header>
+
+<main>
+
+<section id="login" class="card">
+<h2>🔐 Connexion</h2>
+
+<input id="user" placeholder="Nom d'utilisateur" value="eleve">
+<input id="pass" type="password" placeholder="Mot de passe" value="1234">
+
+<button onclick="login()">Se connecter</button>
+
+<p>Compte de démonstration : <b>eleve</b> / <b>1234</b></p>
+</section>
+
+<section id="app" class="hidden">
+
+<div id="home" class="card"></div>
+
+<div id="lessons" class="hidden"></div>
+
+<div id="exercises" class="hidden"></div>
+
+<div id="results" class="hidden"></div>
+
+</section>
+
+</main>
+
+<script>
+let me=null;
+let lessons=[];
+let exercises=[];
+let timer=null;
+let remaining=0;
+
+const $=id=>document.getElementById(id);
+
+async function login(){
+
+try{
+
+const r=await fetch('/api/login',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({
+username:$('user').value,
+password:$('pass').value
+})
+});
+
+const d=await r.json();
+
+if(!r.ok){
+alert(d.error||'Identifiants incorrects');
+return;
+}
+
+me=d;
+
+$('login').classList.add('hidden');
+$('app').classList.remove('hidden');
+
+$('nav').innerHTML=
+"<button onclick=\"show('home')\">Accueil</button>"+
+"<button onclick=\"show('lessons')\">📚 Cours</button>"+
+"<button onclick=\"show('exercises')\">📝 Exercices</button>"+
+"<button onclick=\"show('results')\">📊 Résultats</button>";
+
+$('home').innerHTML=
+"<h2>Bonjour "+me.username+" 👋</h2>"+
+"<p>Classe : "+(me.class_name||"Espace enseignant")+"</p>"+
+"<p>Bienvenue sur School+.</p>";
+
+await load();
+show('home');
+
+}catch(e){
+
+alert("Erreur de connexion au serveur.");
+
+}
+
+}
+
+async function load(){
+
+lessons=await (await fetch('/api/lessons')).json();
+exercises=await (await fetch('/api/exercises')).json();
+
+}
+
+function show(page){
+
+['home','lessons','exercises','results'].forEach(x=>{
+$(x).classList.add('hidden');
+});
+
+$(page).classList.remove('hidden');
+
+if(page==='lessons') renderLessons();
+if(page==='exercises') renderExercises();
+if(page==='results') renderResults();
+
+}
+
+function renderLessons(){
+
+const data=lessons.filter(x=>
+!me.class_name || x.class_name===me.class_name
+);
+
+$('lessons').innerHTML=
+"<h2>📚 Mes cours</h2>"+
+(data.length?data.map(x=>
+"<article class='card'>"+
+"<h3>"+x.subject+" — "+x.title+"</h3>"+
+"<div class='lesson'>"+x.content+"</div>"+
+"</article>"
+).join(''):"<div class='card'>Aucun cours disponible.</div>");
+
+}
+
+function renderExercises(){
+
+const data=exercises.filter(x=>
+!me.class_name || x.class_name===me.class_name
+);
+
+$('exercises').inner
