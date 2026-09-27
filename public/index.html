@@ -623,7 +623,6 @@ async function submitExercise(id){
 /* =========================
    EVALUATIONS
 ========================= */
-
 function loadEvaluations(){
 
   const classe =
@@ -644,16 +643,16 @@ function loadEvaluations(){
   ];
 
   container.innerHTML =
-    matieres.map((matiere,index) => `
+    matieres.map(matiere => `
 
       <div class="evaluation">
 
         <span class="badge">${classe}</span>
 
-        <h3>Évaluation de ${matiere}</h3>
+        <h3>📝 Évaluation de ${matiere}</h3>
 
         <p>
-          Évaluation disponible pour cette matière.
+          5 questions — Note sur 20
         </p>
 
         <button onclick="startEvaluation('${matiere}')">
@@ -668,12 +667,184 @@ function loadEvaluations(){
 
 function startEvaluation(matiere){
 
-  alert(
-    "L'évaluation de " +
-    matiere +
-    " sera chargée avec les questions, la correction et la note."
-  );
+  const classe =
+    document.getElementById("evaluationClass").value;
+
+  const container =
+    document.getElementById("evaluationList");
+
+  const questions = [
+
+    {
+      question:
+        `Question 1 — ${matiere} : Quelle est la définition d'une notion importante de cette matière ?`,
+      answer:
+        "Une définition précise et adaptée à la matière."
+    },
+
+    {
+      question:
+        `Question 2 — ${matiere} : Donne un exemple d'application de cette matière.`,
+      answer:
+        "Un exemple correctement expliqué."
+    },
+
+    {
+      question:
+        `Question 3 — ${matiere} : Quelle méthode faut-il utiliser pour résoudre un exercice ?`,
+      answer:
+        "Il faut identifier les données, choisir la méthode et justifier la réponse."
+    },
+
+    {
+      question:
+        `Question 4 — ${matiere} : Cite une connaissance importante étudiée en classe.`,
+      answer:
+        "Une connaissance correcte du programme."
+    },
+
+    {
+      question:
+        `Question 5 — ${matiere} : Explique brièvement ce que tu as compris.`,
+      answer:
+        "Une explication cohérente et correcte."
+    }
+
+  ];
+
+  container.innerHTML = `
+
+    <div class="card">
+
+      <span class="badge">${classe}</span>
+
+      <h2>📝 Évaluation de ${matiere}</h2>
+
+      <p>
+        Réponds aux 5 questions puis appuie sur
+        <b>Terminer l'évaluation</b>.
+      </p>
+
+      <div id="evaluationQuestions"></div>
+
+      <button onclick="finishEvaluation('${matiere}')">
+        ✅ Terminer l'évaluation
+      </button>
+
+      <div id="evaluationResult"></div>
+
+    </div>
+
+  `;
+
+  const questionsBox =
+    document.getElementById("evaluationQuestions");
+
+  questionsBox.innerHTML =
+    questions.map((q, index) => `
+
+      <div class="lesson">
+
+        <h3>Question ${index + 1}</h3>
+
+        <p>${q.question}</p>
+
+        <textarea
+          id="evaluation-answer-${index}"
+          placeholder="Écris ta réponse ici..."
+        ></textarea>
+
+      </div>
+
+    `).join("");
 }
+
+
+async function finishEvaluation(matiere){
+
+  const result =
+    document.getElementById("evaluationResult");
+
+  let score = 0;
+
+  const answers = [];
+
+  for(let i = 0; i < 5; i++){
+
+    const answer =
+      document.getElementById(
+        "evaluation-answer-" + i
+      ).value.trim();
+
+    answers.push(answer);
+
+    if(answer.length >= 10){
+      score += 4;
+    }
+
+  }
+
+  result.innerHTML = `
+
+    <div class="card">
+
+      <h2>🎉 Évaluation terminée</h2>
+
+      <h3>
+        Note : ${score}/20
+      </h3>
+
+      <p>
+        ${score >= 10
+          ? "✅ Évaluation réussie."
+          : "📚 Continue à réviser et réessaie."}
+      </p>
+
+      <h3>📖 Correction</h3>
+
+      <p>
+        Les réponses doivent être complètes,
+        précises et justifiées.
+      </p>
+
+    </div>
+
+  `;
+
+  /* Enregistrement du résultat */
+
+  if(currentUser){
+
+    try{
+
+      await fetch("/api/evaluations/1/submit",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          userId:currentUser.id,
+          score:score,
+          total:20
+        })
+      });
+
+    }catch(error){
+
+      console.log(
+        "Résultat non enregistré :",
+        error
+      );
+
+    }
+
+  }
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+  }
 
 
 /* =========================
