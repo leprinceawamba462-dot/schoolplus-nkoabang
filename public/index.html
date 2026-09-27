@@ -605,48 +605,6 @@ async function loadExercises(){
 /* =========================
    EVALUATIONS
 ========================= */
-function loadEvaluations(){
-
-  const classe =
-    document.getElementById("evaluationClass").value;
-
-  const container =
-    document.getElementById("evaluationList");
-
-  const matieres = [
-    "Mathématiques",
-    "Français",
-    "Anglais",
-    "Espagnol",
-    "Physique-Chimie",
-    "SVT",
-    "Histoire",
-    "Géographie"
-  ];
-
-  container.innerHTML =
-    matieres.map(matiere => `
-
-      <div class="evaluation">
-
-        <span class="badge">${classe}</span>
-
-        <h3>📝 Évaluation de ${matiere}</h3>
-
-        <p>
-          5 questions — Note sur 20
-        </p>
-
-        <button onclick="startEvaluation('${matiere}')">
-          Commencer
-        </button>
-
-      </div>
-
-    `).join("");
-}
-
-
 function startEvaluation(matiere){
 
   const classe =
