@@ -533,7 +533,7 @@ async function loadCourses(){
    EXERCICES
 ========================= */
 
-async function loadExercises(){
+    async function loadExercises(){
 
   const classe =
     document.getElementById("exerciseClass").value;
@@ -548,8 +548,11 @@ async function loadExercises(){
     const response =
       await fetch("/api/exercises");
 
-    const exercises =
+    const data =
       await response.json();
+
+    const exercises =
+      data.exercises || [];
 
     const filtered =
       exercises.filter(e =>
@@ -587,6 +590,25 @@ async function loadExercises(){
           >
 
           <button onclick="submitExercise(${e.id})">
+            Vérifier
+          </button>
+
+          <div id="correction-${e.id}"></div>
+
+        </div>
+
+      `).join("");
+
+  }catch(error){
+
+    container.innerHTML =
+      `<p class="error">Impossible de charger les exercices.</p>`;
+
+  }
+}
+
+
+async function submitExercise(id){
 
   const answer =
     document.getElementById("answer-" + id).value;
@@ -595,8 +617,10 @@ async function loadExercises(){
     document.getElementById("correction-" + id);
 
   if(!answer.trim()){
+
     box.innerHTML =
       `<p class="error">Écris d'abord une réponse.</p>`;
+
     return;
   }
 
@@ -604,14 +628,18 @@ async function loadExercises(){
 
     const response =
       await fetch("/api/exercises/" + id + "/submit",{
+
         method:"POST",
+
         headers:{
           "Content-Type":"application/json"
         },
+
         body:JSON.stringify({
           answer,
           userId:currentUser ? currentUser.id : 0
         })
+
       });
 
     const data =
@@ -626,14 +654,17 @@ async function loadExercises(){
 
       box.innerHTML =
         `<p class="error"><b>❌ Réponse incorrecte.</b></p>`;
+
     }
 
   }catch(error){
 
     box.innerHTML =
       `<p class="error">Erreur lors de la correction.</p>`;
+
   }
-}
+  }    
+
 
 
 /* =========================
