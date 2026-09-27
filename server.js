@@ -199,17 +199,17 @@ const subjects = {
    ========================================================= */
 
 const curriculum = {};
-
 for (const classe of classes) {
   curriculum[classe] = {};
 
-  for (const matiere of subjects) {
+  for (const matiere of subjects[classe] || []) {
     curriculum[classe][matiere] = {
       chapitres: [],
       lessons: []
     };
   }
 }
+
 
 /* =========================================================
    EXEMPLE DE STRUCTURE DE LEÇONS
