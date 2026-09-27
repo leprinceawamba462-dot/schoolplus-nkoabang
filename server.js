@@ -607,5 +607,397 @@ const exercises = [
     explanation: "Les dénominateurs sont identiques : on additionne les numérateurs."
   },
   {
+      {
     id: 3,
-    class_name: "4e"
+    class_name: "4e",
+    subject: "Mathématiques",
+    title: "Équation",
+    question: "Résous x + 7 = 15.",
+    answer: "8",
+    explanation: "x = 15 - 7 = 8."
+  },
+  {
+    id: 4,
+    class_name: "3e",
+    subject: "Mathématiques",
+    title: "Pythagore",
+    question: "Un triangle rectangle possède des côtés de 3 cm et 4 cm. Trouve l'hypoténuse.",
+    answer: "5",
+    explanation: "3² + 4² = 25, donc l'hypoténuse mesure 5 cm."
+  },
+  {
+    id: 5,
+    class_name: "2nde C",
+    subject: "Mathématiques",
+    title: "Fonction",
+    question: "Pour f(x)=2x+1, calcule f(5).",
+    answer: "11",
+    explanation: "f(5)=2×5+1=11."
+  },
+  {
+    id: 6,
+    class_name: "Terminale C",
+    subject: "Mathématiques",
+    title: "Suite numérique",
+    question: "Pour u(n)=2n+1, calcule u(4).",
+    answer: "9",
+    explanation: "u(4)=2×4+1=9."
+  }
+];
+
+/* =========================
+   ÉVALUATIONS
+   ========================= */
+
+const evaluations = subjects.map((subject, index) => ({
+  id: index + 1,
+  subject,
+  title: `Évaluation de ${subject}`,
+  duration: 30,
+  questions: [
+    { id: 1, question: `Question 1 de ${subject}` },
+    { id: 2, question: `Question 2 de ${subject}` },
+    { id: 3, question: `Question 3 de ${subject}` }
+  ]
+}));
+
+/* =========================
+   API
+   ========================= */
+
+app.get("/api/info", (req, res) => {
+  res.json({
+    success: true,
+    school: SCHOOL,
+    classes,
+    subjects,
+    totalLessons: lessons.length,
+    totalExercises: exercises.length
+  });
+});
+
+app.post("/api/login", (req, res) => {
+  const name = String(
+    req.body.name || req.body.username || ""
+  ).trim();
+
+  const password = String(req.body.password || "");
+
+  if (!name || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Nom et mot de passe obligatoires."
+    });
+  }
+
+  if (password !== PASSWORD) {
+    return res.status(401).json({
+      success: false,
+      message: "Mot de passe incorrect."
+    });
+  }
+
+  const classe =
+    req.body.class_name ||
+    req.body.className ||
+    "6e";
+
+  let student = [...students.values()].find(
+    s =>
+      s.name.toLowerCase() === name.toLowerCase() &&
+      s.class_name === classe
+  );
+
+  if (!student) {
+    student = createStudent(name, classe);
+  }
+
+  res.json({
+    success: true,
+    user: {
+      id: student.id,
+      name: student.name,
+      class_name: student.class_name
+    }
+  });
+});
+
+app.get("/api/lessons", (req, res) => {
+  const classe =
+    req.query.class ||
+    req.query.classe ||
+    req.query.class_name ||
+    "";
+
+  const subject =
+    req.query.subject ||
+    req.query.matiere ||
+    "";
+
+  let result = lessons;
+
+  if (classe) {
+    result = result.filter(
+      x => x.class_name === classe
+    );
+  }
+
+  if (subject) {
+    result = result.filter(
+      x => x.subject === subject
+    );
+  }
+
+  res.json({
+    success: true,
+    lessons: result
+  });
+});
+
+app.get("/api/lessons/:id", (req, res) => {
+  const item = lessons.find(
+    x => String(x.id) === String(req.params.id)
+  );
+
+  if (!item) {
+    return res.status(404).json({
+      success: false,
+      message: "Cours introuvable."
+    });
+  }
+
+  res.json({
+    success: true,
+    lesson: item
+  });
+});
+
+app.get("/api/exercises", (req, res) => {
+  const classe =
+    req.query.class ||
+    req.query.classe ||
+    req.query.class_name ||
+    "";
+
+  const subject =
+    req.query.subject ||
+    req.query.matiere ||
+    "";
+
+  let result = exercises;
+
+  if (classe) {
+    result = result.filter(
+      x => x.class_name === classe
+    );
+  }
+
+  if (subject) {
+    result = result.filter(
+      x => x.subject === subject
+    );
+  }
+
+  res.json({
+    success: true,
+    exercises: result
+  });
+});
+
+app.post("/api/exercises/:id/submit", (req, res) => {
+  const exercise = exercises.find(
+    x => String(x.id) === String(req.params.id)
+  );
+
+  if (!exercise) {
+    return res.status(404).json({
+      success: false,
+      message: "Exercice introuvable."
+    });
+  }
+
+  const answer = String(
+    req.body.answer || ""
+  ).trim();
+
+  const normalize = value =>
+    String(value)
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/[.,]/g, "");
+
+  const correct =
+    normalize(answer) ===
+    normalize(exercise.answer);
+
+  res.json({
+    success: true,
+    correct,
+    message: correct
+      ? "🎉 Bonne réponse !"
+      : "❌ Réponse incorrecte.",
+    correctAnswer: exercise.answer,
+    explanation: exercise.explanation
+  });
+});
+
+app.get("/api/evaluations", (req, res) => {
+  res.json({
+    success: true,
+    evaluations
+  });
+});
+
+app.get("/api/evaluations/:id", (req, res) => {
+  const evaluation = evaluations.find(
+    x => String(x.id) === String(req.params.id)
+  );
+
+  if (!evaluation) {
+    return res.status(404).json({
+      success: false,
+      message: "Évaluation introuvable."
+    });
+  }
+
+  res.json({
+    success: true,
+    evaluation
+  });
+});
+
+app.post("/api/evaluations/:id/submit", (req, res) => {
+  const evaluation = evaluations.find(
+    x => String(x.id) === String(req.params.id)
+  );
+
+  if (!evaluation) {
+    return res.status(404).json({
+      success: false,
+      message: "Évaluation introuvable."
+    });
+  }
+
+  const userId = req.body.userId;
+  const score = Number(req.body.score || 0);
+  const total = Number(req.body.total || 20);
+
+  if (userId && students.has(userId)) {
+    students.get(userId).results.push({
+      type: "evaluation",
+      evaluationId: evaluation.id,
+      subject: evaluation.subject,
+      score,
+      total,
+      date: new Date().toISOString()
+    });
+  }
+
+  res.json({
+    success: true,
+    score,
+    total
+  });
+});
+
+app.get("/api/results/:userId", (req, res) => {
+  const student = students.get(req.params.userId);
+
+  if (!student) {
+    return res.json({
+      success: true,
+      results: []
+    });
+  }
+
+  res.json({
+    success: true,
+    student,
+    results: student.results
+  });
+});
+
+app.post("/api/ai/help", (req, res) => {
+  const question = String(
+    req.body.question || ""
+  ).trim();
+
+  if (!question) {
+    return res.status(400).json({
+      success: false,
+      message: "Écris ta question."
+    });
+  }
+
+  const q = question.toLowerCase();
+
+  let answer =
+    "Je suis l'assistant pédagogique de School+. " +
+    "Envoie-moi l'énoncé complet et je t'expliquerai la méthode étape par étape.";
+
+  if (q.includes("pythagore")) {
+    answer =
+      "Dans un triangle rectangle, " +
+      "hypoténuse² = côté² + côté². " +
+      "Identifie d'abord l'angle droit et l'hypoténuse.";
+  }
+
+  if (q.includes("fraction")) {
+    answer =
+      "Pour additionner des fractions de même dénominateur, " +
+      "additionne les numérateurs et conserve le dénominateur.";
+  }
+
+  if (
+    q.includes("équation") ||
+    q.includes("equation")
+  ) {
+    answer =
+      "Pour résoudre une équation, effectue la même opération " +
+      "sur les deux membres afin d'isoler l'inconnue.";
+  }
+
+  res.json({
+    success: true,
+    answer
+  });
+});
+
+app.get("/api/health", (req, res) => {
+  res.json({
+    success: true,
+    status: "OK",
+    message: "School+ fonctionne."
+  });
+});
+
+/* =========================
+   SITE WEB
+   ========================= */
+
+app.use(
+  express.static(
+    path.join(__dirname, "public")
+  )
+);
+
+app.use((req, res) => {
+  res.sendFile(
+    path.join(
+      __dirname,
+      "public",
+      "index.html"
+    )
+  );
+});
+
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(
+      `School+ démarré sur http://localhost:${PORT}`
+    );
+  });
+}
+
+module.exports = app;
+
