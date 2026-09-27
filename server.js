@@ -42,21 +42,156 @@ const classes = [
    MATIÈRES
    ========================================================= */
 
-const subjects = [
-  "Mathématiques",
-  "Français",
-  "Anglais",
-  "Chimie",
-  "Physique",
-  "SVT",
-  "Histoire",
-  "Géographie",
-  "Informatique",
-  "Éducation civique",
-  "Philosophie",
-  "Espagnol"
-];
+const subjects = {
+  "6e": [
+    "Français",
+    "Mathématiques",
+    "Anglais",
+    "Histoire",
+    "Géographie",
+    "SVT",
+    "Informatique",
+    "Éducation civique"
+  ],
 
+  "5e": [
+    "Français",
+    "Mathématiques",
+    "Anglais",
+    "Histoire",
+    "Géographie",
+    "SVT",
+    "Informatique",
+    "Éducation civique"
+  ],
+
+  "4e": [
+    "Français",
+    "Mathématiques",
+    "Anglais",
+    "Physique",
+    "Chimie",
+    "SVT",
+    "Histoire",
+    "Géographie",
+    "Informatique",
+    "Éducation civique"
+  ],
+
+  "3e": [
+    "Français",
+    "Mathématiques",
+    "Anglais",
+    "Physique",
+    "Chimie",
+    "SVT",
+    "Histoire",
+    "Géographie",
+    "Informatique",
+    "Éducation civique"
+  ],
+
+  "2nde C": [
+    "Français",
+    "Anglais",
+    "Mathématiques",
+    "Physique",
+    "Chimie",
+    "SVT",
+    "Histoire",
+    "Géographie",
+    "Informatique",
+    "Éducation civique"
+  ],
+
+  "2nde A": [
+    "Français",
+    "Anglais",
+    "Mathématiques",
+    "Histoire",
+    "Géographie",
+    "SVT",
+    "Informatique",
+    "Éducation civique",
+    "Espagnol"
+  ],
+
+  "Première C": [
+    "Français",
+    "Anglais",
+    "Mathématiques",
+    "Physique",
+    "Chimie",
+    "SVT",
+    "Histoire",
+    "Géographie",
+    "Informatique",
+    "Éducation civique"
+  ],
+
+  "Première D": [
+    "Français",
+    "Anglais",
+    "Mathématiques",
+    "Physique",
+    "Chimie",
+    "SVT",
+    "Histoire",
+    "Géographie",
+    "Informatique",
+    "Éducation civique"
+  ],
+
+  "Première A4": [
+    "Français",
+    "Anglais",
+    "Mathématiques",
+    "Histoire",
+    "Géographie",
+    "Philosophie",
+    "Espagnol",
+    "Informatique",
+    "Éducation civique"
+  ],
+
+  "Terminale C": [
+    "Français",
+    "Anglais",
+    "Mathématiques",
+    "Physique",
+    "Chimie",
+    "SVT",
+    "Histoire",
+    "Géographie",
+    "Informatique",
+    "Éducation civique"
+  ],
+
+  "Terminale D": [
+    "Français",
+    "Anglais",
+    "Mathématiques",
+    "Physique",
+    "Chimie",
+    "SVT",
+    "Histoire",
+    "Géographie",
+    "Informatique",
+    "Éducation civique"
+  ],
+
+  "Terminale A4": [
+    "Français",
+    "Anglais",
+    "Mathématiques",
+    "Histoire",
+    "Géographie",
+    "Philosophie",
+    "Espagnol",
+    "Informatique",
+    "Éducation civique"
+  ]
+};
 /* =========================================================
    PROGRAMME
    Structure :
