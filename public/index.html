@@ -553,24 +553,6 @@ async function loadExercises(){
           >
 
           <button onclick="submitExercise(${e.id})">
-            Corriger
-          </button>
-
-          <div id="correction-${e.id}"></div>
-
-        </div>
-
-      `).join("");
-
-  }catch(error){
-
-    container.innerHTML =
-      `<p class="error">Impossible de charger les exercices.</p>`;
-  }
-}
-
-
-async function submitExercise(id){
 
   const answer =
     document.getElementById("answer-" + id).value;
