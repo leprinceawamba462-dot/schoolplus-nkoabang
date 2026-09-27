@@ -1,117 +1,89 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>School+ — Lycée Bilingue de Nkoabang</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School+ — Lycée Bilingue de Nkoabang</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f1f8f4;
-      color: #222;
-    }
-
-    header {
-      background: #0b8f6a;
-      color: white;
-      padding: 25px 15px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 32px;
-    }
-
-    header p {
-      margin: 8px 0 0;
-    }
-
-    main {
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
-
-    input {
-      width: 100%;
-      padding: 14px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    button {
-      border: none;
-      border-radius: 8px;
-      padding: 13px 18px;
-      background: #0b8f6a;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-
-    button:hover {
-      background: #087556;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .error {
-      color: #b00020;
-      margin-top: 12px;
-    }
-
-    .success {
-      background: #e8f8ee;
-      padding: 12px;
-      border-radius: 8px;
-    }
-
-    .lesson,
-    .exercise {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 12px 0;
-    }
-
-    nav {
-      margin-top: 15px;
-    }
-
-    nav button {
-      background: white;
-      color: #0b8f6a;
-      margin: 4px;
-    }
-
-    .logout {
-      background: #b00020;
-    }
-
-    .answer {
-      margin-top: 10px;
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f3f8f5;
+  color:#18352a;
+}
+header{
+  background:#159447;
+  color:white;
+  padding:18px;
+  text-align:center;
+}
+header h1{margin:0;font-size:28px}
+header p{margin:6px 0 0}
+.container{max-width:1100px;margin:auto;padding:20px}
+.card{
+  background:white;
+  border-radius:16px;
+  padding:20px;
+  margin:15px 0;
+  box-shadow:0 3px 12px #0001;
+}
+input,select,button,textarea{
+  width:100%;
+  padding:12px;
+  margin:7px 0;
+  border:1px solid #ccc;
+  border-radius:10px;
+  font-size:15px;
+}
+button{
+  background:#159447;
+  color:white;
+  border:0;
+  cursor:pointer;
+  font-weight:bold;
+}
+button:hover{background:#107b3a}
+nav{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:15px;
+}
+nav button{width:auto;padding:10px 15px}
+.hidden{display:none}
+.badge{
+  display:inline-block;
+  background:#e1f5e8;
+  color:#08732f;
+  padding:6px 10px;
+  border-radius:20px;
+  margin:3px;
+}
+.lesson,.exercise,.evaluation{
+  border-left:5px solid #159447;
+  padding:15px;
+  margin:12px 0;
+  background:#f8fffa;
+  border-radius:10px;
+}
+.error{color:#c62828}
+.success{color:#08732f}
+.small{font-size:13px;color:#666}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+}
+.stat{
+  background:#159447;
+  color:white;
+  padding:18px;
+  border-radius:15px;
+  text-align:center;
+}
+</style>
 </head>
 
 <body>
@@ -119,285 +91,740 @@
 <header>
   <h1>School+ 📚</h1>
   <p>Lycée Bilingue de Nkoabang</p>
-
-  <nav id="nav" class="hidden">
-    <button onclick="showPage('home')">Accueil</button>
-    <button onclick="showPage('lessons')">Cours</button>
-    <button onclick="showPage('exercises')">Exercices</button>
-    <button onclick="logout()" class="logout">Déconnexion</button>
-  </nav>
 </header>
 
-<main>
+<div class="container">
 
-  <!-- CONNEXION -->
-  <section id="login" class="card">
-    <h2>🔐 Connexion</h2>
+<!-- CONNEXION -->
+<section id="loginSection" class="card">
+  <h2>Connexion</h2>
 
-    <form id="loginForm">
-      <input
-        id="user"
-        type="text"
-        placeholder="Nom d'utilisateur"
-        value="eleve"
-        required
-      >
+  <input id="username" placeholder="Nom d'utilisateur">
+  <input id="password" type="password" placeholder="Mot de passe">
 
-      <input
-        id="pass"
-        type="password"
-        placeholder="Mot de passe"
-        value="1234"
-        required
-      >
+  <button onclick="login()">Se connecter</button>
 
-      <button type="submit">Se connecter</button>
-    </form>
+  <p id="loginMessage"></p>
 
-    <p id="loginMessage"></p>
+  <p class="small">
+    Compte élève : <b>eleve / 1234</b><br>
+    Compte professeur : <b>prof / 1234</b>
+  </p>
+</section>
 
-    <p>
-      Compte de démonstration :
-      <b>eleve</b> / <b>1234</b>
-    </p>
-  </section>
+<!-- APPLICATION -->
+<section id="appSection" class="hidden">
 
-  <!-- APPLICATION -->
-  <section id="app" class="hidden">
+<nav>
+  <button onclick="showPage('home')">Accueil</button>
+  <button onclick="showPage('courses')">📚 Cours</button>
+  <button onclick="showPage('exercises')">✏️ Exercices</button>
+  <button onclick="showPage('evaluations')">📝 Évaluations</button>
+  <button onclick="showPage('ai')">🤖 IA</button>
+  <button onclick="showPage('results')">📊 Résultats</button>
+  <button onclick="logout()">Déconnexion</button>
+</nav>
 
-    <!-- ACCUEIL -->
-    <div id="home" class="card">
-      <h2>Bienvenue sur School+ 👋</h2>
-      <p id="welcome"></p>
+<!-- ACCUEIL -->
+<div id="home" class="page">
 
-      <div class="success">
-        <b>📚 Ta plateforme scolaire</b>
-        <p>
-          Consulte tes cours et entraîne-toi avec les exercices.
-        </p>
-      </div>
-    </div>
+<div class="card">
+  <h2 id="welcome"></h2>
+  <p>
+    Bienvenue dans School+. Retrouvez vos cours, exercices,
+    évaluations et votre assistant pédagogique.
+  </p>
+</div>
 
-    <!-- COURS -->
-    <div id="lessons" class="card hidden">
-      <h2>📖 Mes cours</h2>
-      <div id="lessonsList">Chargement...</div>
-    </div>
+<div class="grid">
+  <div class="stat">
+    <h2>📚</h2>
+    <span>Cours</span>
+  </div>
+  <div class="stat">
+    <h2>✏️</h2>
+    <span>Exercices</span>
+  </div>
+  <div class="stat">
+    <h2>📝</h2>
+    <span>Évaluations</span>
+  </div>
+  <div class="stat">
+    <h2>🤖</h2>
+    <span>Assistant IA</span>
+  </div>
+</div>
 
-    <!-- EXERCICES -->
-    <div id="exercises" class="card hidden">
-      <h2>✏️ Mes exercices</h2>
-      <div id="exercisesList">Chargement...</div>
-    </div>
+<div class="card">
+  <h3>Ma classe</h3>
+  <select id="classSelect" onchange="loadEverything()">
+    <option value="6e">6e</option>
+    <option value="5e">5e</option>
+    <option value="4e">4e</option>
+    <option value="3e">3e</option>
+    <option value="2nde A">2nde A</option>
+    <option value="2nde C">2nde C</option>
+    <option value="Première A4">Première A4</option>
+    <option value="Première C">Première C</option>
+    <option value="Première D">Première D</option>
+    <option value="Terminale A4">Terminale A4</option>
+    <option value="Terminale C">Terminale C</option>
+    <option value="Terminale D">Terminale D</option>
+  </select>
+</div>
 
-  </section>
+</div>
 
-</main>
+<!-- COURS -->
+<div id="courses" class="page hidden">
+
+<div class="card">
+<h2>📚 Mes cours</h2>
+
+<select id="courseClass" onchange="loadCourses()">
+  <option value="6e">6e</option>
+  <option value="5e">5e</option>
+  <option value="4e">4e</option>
+  <option value="3e">3e</option>
+  <option value="2nde A">2nde A</option>
+  <option value="2nde C">2nde C</option>
+  <option value="Première A4">Première A4</option>
+  <option value="Première C">Première C</option>
+  <option value="Première D">Première D</option>
+  <option value="Terminale A4">Terminale A4</option>
+  <option value="Terminale C">Terminale C</option>
+  <option value="Terminale D">Terminale D</option>
+</select>
+
+<select id="courseSubject" onchange="loadCourses()">
+  <option value="">Toutes les matières</option>
+  <option>Mathématiques</option>
+  <option>Français</option>
+  <option>Anglais</option>
+  <option>Espagnol</option>
+  <option>Physique-Chimie</option>
+  <option>SVT</option>
+  <option>Histoire</option>
+  <option>Géographie</option>
+  <option>Informatique</option>
+  <option>Philosophie</option>
+</select>
+
+<div id="courseList"></div>
+</div>
+
+</div>
+
+<!-- EXERCICES -->
+<div id="exercises" class="page hidden">
+
+<div class="card">
+<h2>✏️ Exercices</h2>
+
+<select id="exerciseClass" onchange="loadExercises()">
+  <option value="6e">6e</option>
+  <option value="5e">5e</option>
+  <option value="4e">4e</option>
+  <option value="3e">3e</option>
+  <option value="2nde A">2nde A</option>
+  <option value="2nde C">2nde C</option>
+  <option value="Première A4">Première A4</option>
+  <option value="Première C">Première C</option>
+  <option value="Première D">Première D</option>
+  <option value="Terminale A4">Terminale A4</option>
+  <option value="Terminale C">Terminale C</option>
+  <option value="Terminale D">Terminale D</option>
+</select>
+
+<div id="exerciseList"></div>
+</div>
+
+</div>
+
+<!-- EVALUATIONS -->
+<div id="evaluations" class="page hidden">
+
+<div class="card">
+<h2>📝 Évaluations</h2>
+<p>Évaluations par matière et par niveau.</p>
+
+<select id="evaluationClass" onchange="loadEvaluations()">
+  <option value="6e">6e</option>
+  <option value="5e">5e</option>
+  <option value="4e">4e</option>
+  <option value="3e">3e</option>
+  <option value="2nde A">2nde A</option>
+  <option value="2nde C">2nde C</option>
+  <option value="Première C">Première C</option>
+  <option value="Première D">Première D</option>
+  <option value="Terminale C">Terminale C</option>
+  <option value="Terminale D">Terminale D</option>
+</select>
+
+<div id="evaluationList"></div>
+</div>
+
+</div>
+
+<!-- IA -->
+<div id="ai" class="page hidden">
+
+<div class="card">
+<h2>🤖 Assistant pédagogique School+</h2>
+
+<p>
+Pose une question sur un cours, un exercice ou une notion
+que tu ne comprends pas.
+</p>
+
+<textarea id="aiQuestion"
+placeholder="Exemple : Explique-moi les équations du premier degré..."></textarea>
+
+<button onclick="askAI()">Demander à l'IA</button>
+
+<div id="aiAnswer" class="lesson"></div>
+</div>
+
+</div>
+
+<!-- RESULTATS -->
+<div id="results" class="page hidden">
+
+<div class="card">
+<h2>📊 Mes résultats</h2>
+<div id="resultsList"></div>
+</div>
+
+</div>
+
+</section>
+
+</div>
 
 <script>
-  let currentUser = null;
 
-  const loginForm = document.getElementById("loginForm");
+let currentUser = null;
 
-  loginForm.addEventListener("submit", async function(event) {
-    event.preventDefault();
+/* =========================
+   CONNEXION
+========================= */
 
-    const username = document.getElementById("user").value.trim();
-    const password = document.getElementById("pass").value;
+async function login(){
 
-    const message = document.getElementById("loginMessage");
+  const username =
+    document.getElementById("username").value.trim();
 
-    message.textContent = "Connexion en cours...";
-    message.className = "";
+  const password =
+    document.getElementById("password").value.trim();
 
-    try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password
-        })
-      });
+  const message =
+    document.getElementById("loginMessage");
 
-      const data = await response.json();
+  message.textContent = "";
 
-      if (!response.ok || !data.success) {
-        message.textContent =
-          data.message || "Nom d'utilisateur ou mot de passe incorrect.";
-        message.className = "error";
-        return;
-      }
+  if(!username || !password){
+    message.textContent = "Veuillez remplir les deux champs.";
+    message.className = "error";
+    return;
+  }
 
-      currentUser = data.user;
+  try{
 
-      document.getElementById("login").classList.add("hidden");
-      document.getElementById("app").classList.remove("hidden");
-      document.getElementById("nav").classList.remove("hidden");
+    const response = await fetch("/api/login",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        username,
+        password
+      })
+    });
 
-      document.getElementById("welcome").textContent =
-        "Bonjour " + currentUser.name + " ! Classe : " +
-        (currentUser.class_name || "Non définie");
+    const data = await response.json();
 
-      await loadLessons();
-      await loadExercises();
-
-      showPage("home");
-
-    } catch (error) {
-      console.error(error);
-
+    if(!response.ok || !data.success){
       message.textContent =
-        "Impossible de contacter le serveur. Réessaie.";
+        data.message || "Connexion impossible.";
       message.className = "error";
-    }
-  });
-
-  async function loadLessons() {
-    const container = document.getElementById("lessonsList");
-
-    try {
-      const response = await fetch("/api/lessons");
-      const lessons = await response.json();
-
-      container.innerHTML = "";
-
-      if (!lessons.length) {
-        container.innerHTML = "<p>Aucun cours disponible.</p>";
-        return;
-      }
-
-      lessons.forEach(function(lesson) {
-        const div = document.createElement("div");
-        div.className = "lesson";
-
-        div.innerHTML = `
-          <h3>${escapeHtml(lesson.title)}</h3>
-          <p>${escapeHtml(lesson.content)}</p>
-          <small>Classe : ${escapeHtml(lesson.class_name || "")}</small>
-        `;
-
-        container.appendChild(div);
-      });
-
-    } catch (error) {
-      container.innerHTML =
-        "<p class='error'>Impossible de charger les cours.</p>";
-    }
-  }
-
-  async function loadExercises() {
-    const container = document.getElementById("exercisesList");
-
-    try {
-      const response = await fetch("/api/exercises");
-      const exercises = await response.json();
-
-      container.innerHTML = "";
-
-      if (!exercises.length) {
-        container.innerHTML = "<p>Aucun exercice disponible.</p>";
-        return;
-      }
-
-      exercises.forEach(function(exercise) {
-        const div = document.createElement("div");
-        div.className = "exercise";
-
-        div.innerHTML = `
-          <h3>${escapeHtml(exercise.title)}</h3>
-          <p><b>${escapeHtml(exercise.question)}</b></p>
-
-          <input
-            class="answer"
-            id="answer-${exercise.id}"
-            placeholder="Ta réponse"
-          >
-
-          <button onclick="submitExercise(${exercise.id})">
-            Vérifier
-          </button>
-
-          <p id="result-${exercise.id}"></p>
-        `;
-
-        container.appendChild(div);
-      });
-
-    } catch (error) {
-      container.innerHTML =
-        "<p class='error'>Impossible de charger les exercices.</p>";
-    }
-  }
-
-  async function submitExercise(id) {
-    const input = document.getElementById("answer-" + id);
-    const result = document.getElementById("result-" + id);
-
-    const answer = input.value.trim();
-
-    if (!answer) {
-      result.textContent = "Entre une réponse.";
-      result.className = "error";
       return;
     }
 
-    try {
-      const response = await fetch("/api/exercises/" + id + "/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
+    currentUser = data.user;
+
+    document.getElementById("loginSection")
+      .classList.add("hidden");
+
+    document.getElementById("appSection")
+      .classList.remove("hidden");
+
+    document.getElementById("welcome").textContent =
+      "Bienvenue " + (currentUser.name || currentUser.username) + " 👋";
+
+    if(currentUser.class_name){
+      document.getElementById("classSelect").value =
+        currentUser.class_name;
+    }
+
+    loadEverything();
+
+  }catch(error){
+
+    message.textContent =
+      "Erreur de connexion au serveur.";
+
+    message.className = "error";
+  }
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showPage(page){
+
+  document.querySelectorAll(".page")
+    .forEach(p => p.classList.add("hidden"));
+
+  document.getElementById(page)
+    .classList.remove("hidden");
+
+  if(page === "courses") loadCourses();
+  if(page === "exercises") loadExercises();
+  if(page === "evaluations") loadEvaluations();
+  if(page === "results") loadResults();
+}
+
+
+/* =========================
+   CHARGEMENT GLOBAL
+========================= */
+
+function loadEverything(){
+
+  const classe =
+    document.getElementById("classSelect").value;
+
+  document.getElementById("courseClass").value = classe;
+  document.getElementById("exerciseClass").value = classe;
+  document.getElementById("evaluationClass").value = classe;
+
+  loadCourses();
+  loadExercises();
+  loadEvaluations();
+}
+
+
+/* =========================
+   COURS
+========================= */
+
+async function loadCourses(){
+
+  const classe =
+    document.getElementById("courseClass").value;
+
+  const matiere =
+    document.getElementById("courseSubject").value;
+
+  const container =
+    document.getElementById("courseList");
+
+  container.innerHTML = "Chargement...";
+
+  try{
+
+    const response =
+      await fetch("/api/lessons");
+
+    const lessons =
+      await response.json();
+
+    let filtered =
+      lessons.filter(c =>
+        !c.class_name ||
+        c.class_name === classe
+      );
+
+    if(matiere){
+      filtered = filtered.filter(c =>
+        c.subject === matiere
+      );
+    }
+
+    if(!filtered.length){
+
+      container.innerHTML = `
+        <div class="lesson">
+          <b>Aucun cours disponible pour cette sélection.</b>
+          <p class="small">
+            Les cours seront ajoutés progressivement par niveau
+            et par matière.
+          </p>
+        </div>
+      `;
+
+      return;
+    }
+
+    container.innerHTML =
+      filtered.map(c => `
+        <div class="lesson">
+
+          <span class="badge">
+            ${c.class_name || classe}
+          </span>
+
+          <span class="badge">
+            ${c.subject || "Matière"}
+          </span>
+
+          <h3>${c.title}</h3>
+
+          <p>${c.content || ""}</p>
+
+        </div>
+      `).join("");
+
+  }catch(error){
+
+    container.innerHTML =
+      `<p class="error">Impossible de charger les cours.</p>`;
+  }
+}
+
+
+/* =========================
+   EXERCICES
+========================= */
+
+async function loadExercises(){
+
+  const classe =
+    document.getElementById("exerciseClass").value;
+
+  const container =
+    document.getElementById("exerciseList");
+
+  container.innerHTML = "Chargement...";
+
+  try{
+
+    const response =
+      await fetch("/api/exercises");
+
+    const exercises =
+      await response.json();
+
+    const filtered =
+      exercises.filter(e =>
+        !e.class_name ||
+        e.class_name === classe
+      );
+
+    if(!filtered.length){
+
+      container.innerHTML = `
+        <div class="exercise">
+          <b>Aucun exercice disponible pour cette classe.</b>
+        </div>
+      `;
+
+      return;
+    }
+
+    container.innerHTML =
+      filtered.map(e => `
+
+        <div class="exercise">
+
+          <span class="badge">
+            ${e.subject || "Matière"}
+          </span>
+
+          <h3>${e.title}</h3>
+
+          <p>${e.question}</p>
+
+          <input
+            id="answer-${e.id}"
+            placeholder="Votre réponse"
+          >
+
+          <button onclick="submitExercise(${e.id})">
+            Corriger
+          </button>
+
+          <div id="correction-${e.id}"></div>
+
+        </div>
+
+      `).join("");
+
+  }catch(error){
+
+    container.innerHTML =
+      `<p class="error">Impossible de charger les exercices.</p>`;
+  }
+}
+
+
+async function submitExercise(id){
+
+  const answer =
+    document.getElementById("answer-" + id).value;
+
+  const box =
+    document.getElementById("correction-" + id);
+
+  if(!answer.trim()){
+    box.innerHTML =
+      `<p class="error">Écris d'abord une réponse.</p>`;
+    return;
+  }
+
+  try{
+
+    const response =
+      await fetch("/api/exercises/" + id + "/submit",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
         },
-        body: JSON.stringify({
-          userId: currentUser.id,
-          answer: answer
+        body:JSON.stringify({
+          answer,
+          userId:currentUser ? currentUser.id : 0
         })
       });
 
-      const data = await response.json();
+    const data =
+      await response.json();
 
-      if (data.correct) {
-        result.textContent = "✅ Bonne réponse !";
-        result.className = "success";
-      } else {
-        result.textContent = "❌ Mauvaise réponse.";
-        result.className = "error";
-      }
+    if(data.correct){
 
-    } catch (error) {
-      result.textContent = "Erreur de connexion.";
-      result.className = "error";
+      box.innerHTML =
+        `<p class="success"><b>✅ Bonne réponse !</b></p>`;
+
+    }else{
+
+      box.innerHTML =
+        `<p class="error"><b>❌ Réponse incorrecte.</b></p>`;
     }
+
+  }catch(error){
+
+    box.innerHTML =
+      `<p class="error">Erreur lors de la correction.</p>`;
+  }
+}
+
+
+/* =========================
+   EVALUATIONS
+========================= */
+
+function loadEvaluations(){
+
+  const classe =
+    document.getElementById("evaluationClass").value;
+
+  const container =
+    document.getElementById("evaluationList");
+
+  const matieres = [
+    "Mathématiques",
+    "Français",
+    "Anglais",
+    "Espagnol",
+    "Physique-Chimie",
+    "SVT",
+    "Histoire",
+    "Géographie"
+  ];
+
+  container.innerHTML =
+    matieres.map((matiere,index) => `
+
+      <div class="evaluation">
+
+        <span class="badge">${classe}</span>
+
+        <h3>Évaluation de ${matiere}</h3>
+
+        <p>
+          Évaluation disponible pour cette matière.
+        </p>
+
+        <button onclick="startEvaluation('${matiere}')">
+          Commencer
+        </button>
+
+      </div>
+
+    `).join("");
+}
+
+
+function startEvaluation(matiere){
+
+  alert(
+    "L'évaluation de " +
+    matiere +
+    " sera chargée avec les questions, la correction et la note."
+  );
+}
+
+
+/* =========================
+   IA PEDAGOGIQUE
+========================= */
+
+async function askAI(){
+
+  const question =
+    document.getElementById("aiQuestion").value.trim();
+
+  const answer =
+    document.getElementById("aiAnswer");
+
+  if(!question){
+
+    answer.innerHTML =
+      "<p>Écris d'abord ta question.</p>";
+
+    return;
   }
 
-  function showPage(page) {
-    document.getElementById("home").classList.add("hidden");
-    document.getElementById("lessons").classList.add("hidden");
-    document.getElementById("exercises").classList.add("hidden");
+  answer.innerHTML =
+    "🤖 L'assistant réfléchit...";
 
-    document.getElementById(page).classList.remove("hidden");
+  try{
+
+    const response =
+      await fetch("/api/ai/help",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          question,
+          class_name:
+            currentUser?.class_name || ""
+        })
+      });
+
+    const data =
+      await response.json();
+
+    answer.innerHTML =
+      `<p>${data.answer || data.message || "Réponse indisponible."}</p>`;
+
+  }catch(error){
+
+    answer.innerHTML = `
+      <p>
+        L'assistant IA n'est pas encore connecté.
+        La fonction sera activée lorsque le service IA sera configuré.
+      </p>
+    `;
+  }
+}
+
+
+/* =========================
+   RESULTATS
+========================= */
+
+async function loadResults(){
+
+  const container =
+    document.getElementById("resultsList");
+
+  if(!currentUser){
+
+    container.innerHTML =
+      "<p>Connectez-vous pour voir vos résultats.</p>";
+
+    return;
   }
 
-  function logout() {
-    currentUser = null;
+  try{
 
-    document.getElementById("app").classList.add("hidden");
-    document.getElementById("nav").classList.add("hidden");
-    document.getElementById("login").classList.remove("hidden");
+    const response =
+      await fetch("/api/results/" + currentUser.id);
 
-    document.getElementById("user").value = "eleve";
-    document.getElementById("pass").value = "1234";
-    document.getElementById("loginMessage").textContent = "";
+    const results =
+      await response.json();
+
+    if(!results.length){
+
+      container.innerHTML =
+        "<p>Aucun résultat pour le moment.</p>";
+
+      return;
+    }
+
+    container.innerHTML =
+      results.map(r => `
+
+        <div class="lesson">
+
+          <b>Exercice ${r.exercise_id}</b>
+
+          <p>
+            Note :
+            <strong>${r.score}</strong>
+          </p>
+
+          <p>
+            ${r.correct ? "✅ Correct" : "❌ Incorrect"}
+          </p>
+
+        </div>
+
+      `).join("");
+
+  }catch(error){
+
+    container.innerHTML =
+      "<p>Impossible de charger les résultats.</p>";
+  }
+}
+
+
+/* =========================
+   DECONNEXION
+========================= */
+
+function logout(){
+
+  currentUser = null;
+
+  document.getElementById("appSection")
+    .classList.add("hidden");
+
+  document.getElementById("loginSection")
+    .classList.remove("hidden");
+
+  document.getElementById("password").value = "";
+}
+
+
+/* Entrée clavier */
+document.addEventListener("keydown",function(event){
+
+  if(
+    event.key === "Enter" &&
+    !document.getElementById("loginSection")
+      .classList.contains("hidden")
+  ){
+    login();
   }
 
-  function escapeHtml(text) {
-    const div = document.createElement("div");
-    div.textContent = text ?? "";
-    return div.innerHTML;
-  }
+});
+
 </script>
 
 </body>
-  </html>
+  </html>66
